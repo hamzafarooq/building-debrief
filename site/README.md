@@ -1,5 +1,7 @@
 # Building Debrief
 
+**Live:** https://building-debrief.vercel.app/
+
 A lesson site that teaches a cohort of product managers how to make skills, sub-agents, agent teams and a memory layer in Claude Code, by walking them through building the [Debrief](..) project, which is the repository this folder lives in step by step.
 
 - Astro, static output. Tailwind. React islands only for the interactive parts: `StepCheck`, `ProgressNav`, `Check`, `TerminalReplay`, `TeamReplay`.

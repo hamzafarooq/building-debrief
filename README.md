@@ -1,12 +1,14 @@
 # Debrief
 
+> **Build it yourself, step by step:** [building-debrief.vercel.app](https://building-debrief.vercel.app/)
+>
+> A guided lesson site that takes you from an empty folder to this finished project, one idea per lesson: skills, sub-agents, agent teams, and memory. Every step has the files to paste, a picture of what you should see, and a "Mark done" button. No coding needed. Its source is in [`site/`](site/).
+
 ## Why we built this
 
 Every week a course facilitator finishes a live class and has to ship the same five documents: a recap email, a session report, an FAQ, a quiz, and a set of flashcards. The raw material is a two-hour Zoom transcript, tens of thousands of tokens of speech-to-text with mishearings in it. The work is real, repetitive, and easy to do inconsistently.
 
 Debrief turns that transcript into those five documents, plus HTML renders of three of them.
-
-**Want to build it yourself?** [Building Debrief](https://building-debrief.vercel.app/) walks through it step by step, from an empty folder to the finished project, one mechanism per lesson.
 
 ## The four ideas
 
@@ -49,6 +51,7 @@ outputs/module-NN/                 generated: five .md deliverables, three .html
 vault/                             what the course knows, across every module
   README.md                        the conventions and merge rules
 doc/README.md                      the long guide, with diagrams
+site/                              the step-by-step lesson site, live at building-debrief.vercel.app
 ```
 
 `NN` is the module number, accepted with or without the leading zero. Add a session by dropping `module-N.vtt` into `transcript/`. Eight files land in `outputs/module-02/`, and that folder is regenerated on every run and is not committed.
