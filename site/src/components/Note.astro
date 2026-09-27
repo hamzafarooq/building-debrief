@@ -1,0 +1,17 @@
+---
+interface Props { kind?: 'tip' | 'watch' | 'plain'; title?: string }
+const { kind = 'plain', title } = Astro.props;
+const style: Record<string, string> = {
+  tip: 'border-agent/40 bg-agent-soft/50',
+  watch: 'border-skill/50 bg-skill-soft/60',
+  plain: 'border-line bg-paper/70',
+};
+const icon: Record<string, string> = { tip: '→', watch: '!', plain: '·' };
+---
+<div class={`my-4 rounded-lg border px-4 py-3 text-[14.5px] flex gap-3 ${style[kind]}`}>
+  <span class="font-mono text-ink-3 shrink-0 mt-0.5">{icon[kind]}</span>
+  <div class="min-w-0">
+    {title && <p class="font-semibold mb-0.5">{title}</p>}
+    <slot />
+  </div>
+</div>

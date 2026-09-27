@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="832" viewBox="0 0 900 832" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <!-- The whole Debrief project on one page, drawn in the style of pipeline.svg.
+       Site-only: not synced from ../Debrief. -->
+  <defs>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8A887E"/>
+    </marker>
+    <marker id="c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#D97757"/>
+    </marker>
+    <marker id="cs" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M10 0 L0 5 L10 10 z" fill="#D97757"/>
+    </marker>
+    <marker id="v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#9C4A74"/>
+    </marker>
+  </defs>
+  <rect width="900" height="832" fill="#FAF9F5"/>
+
+  <!-- legend -->
+  <rect x="20" y="20" width="18" height="16" rx="4" fill="#FBEFE9" stroke="#E7BCA6"/>
+  <text x="44" y="33" font-size="11" fill="#5A5952">skill, runs in your chat</text>
+  <rect x="190" y="20" width="18" height="16" rx="4" fill="#FFFFFF" stroke="#D8D4C8"/>
+  <text x="214" y="33" font-size="11" fill="#5A5952">sub-agent, own context</text>
+  <rect x="356" y="20" width="18" height="16" rx="4" fill="#FFFFFF" stroke="#D97757" stroke-width="1.5"/>
+  <text x="380" y="33" font-size="11" fill="#5A5952">teammate, can message the other</text>
+  <rect x="580" y="20" width="18" height="16" rx="4" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="604" y="33" font-size="11" fill="#5A5952">a file on disk</text>
+  <rect x="706" y="22" width="44" height="13" rx="6.5" fill="#F6E9EF" stroke="#DDB9CB"/>
+  <text x="728" y="31.5" font-size="8.5" fill="#9C4A74" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">memory</text>
+  <text x="756" y="33" font-size="11" fill="#5A5952">keeps a notebook</text>
+
+  <!-- shared input -->
+  <rect x="16" y="54" width="868" height="52" rx="10" fill="#FFFFFF" stroke="#E4E0D4"/>
+  <text x="36" y="76" font-size="12" font-weight="600" fill="#141413">Every command starts from the same two files</text>
+  <text x="36" y="94" font-size="11" fill="#7C7A70">The transcript is the input. CLAUDE.md is read first: folder layout, house rules, your course.</text>
+  <rect x="566" y="64" width="140" height="32" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="636" y="84" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">module-02.vtt</text>
+  <rect x="720" y="64" width="140" height="32" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="790" y="84" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">CLAUDE.md</text>
+
+  <!-- lane 1 : skill -->
+  <rect x="16" y="122" width="868" height="104" rx="14" fill="none" stroke="#E7BCA6" stroke-dasharray="5 5"/>
+  <text x="36" y="148" font-size="13" font-weight="600" fill="#141413" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">/recap-email 02</text>
+  <text x="182" y="148" font-size="12.5" fill="#A9543A">one skill, in your own chat</text>
+  <text x="864" y="148" font-size="10.5" fill="#8A887E" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">LESSON 1</text>
+
+  <rect x="36" y="166" width="104" height="44" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="88" y="185" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">module-02</text>
+  <text x="88" y="200" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">.vtt</text>
+
+  <rect x="166" y="164" width="150" height="50" rx="9" fill="#FBEFE9" stroke="#E7BCA6"/>
+  <text x="241" y="185" font-size="12" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">recap-email</text>
+  <text x="241" y="201" font-size="10.5" fill="#A9543A" text-anchor="middle">reads the transcript</text>
+
+  <rect x="344" y="170" width="140" height="38" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="414" y="194" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">recap-email.md</text>
+
+  <text x="524" y="184" font-size="11" fill="#7C7A70">The transcript lands in your context.</text>
+  <text x="524" y="202" font-size="11" fill="#7C7A70">Fine once. Not for every document.</text>
+
+  <path d="M140 188 L162 188" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M316 189 L340 189" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+
+  <!-- lane 2 : sub-agents -->
+  <rect x="16" y="242" width="868" height="190" rx="14" fill="none" stroke="#D8D4C8" stroke-dasharray="5 5"/>
+  <text x="36" y="268" font-size="13" font-weight="600" fill="#141413" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">/debrief 02</text>
+  <text x="150" y="268" font-size="12.5" fill="#7C7A70">two sub-agents read at once, then one render</text>
+  <text x="864" y="268" font-size="10.5" fill="#8A887E" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">LESSON 2</text>
+
+  <rect x="36" y="312" width="104" height="52" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="88" y="334" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">module-02</text>
+  <text x="88" y="349" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">.vtt</text>
+
+  <rect x="166" y="282" width="150" height="50" rx="9" fill="#FFFFFF" stroke="#D8D4C8"/>
+  <text x="241" y="303" font-size="12" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">report-writer</text>
+  <text x="241" y="319" font-size="10.5" fill="#7C7A70" text-anchor="middle">reads the transcript</text>
+  <rect x="284" y="275" width="44" height="13" rx="6.5" fill="#F6E9EF" stroke="#DDB9CB"/>
+  <text x="306" y="284.5" font-size="8.5" fill="#9C4A74" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">memory</text>
+
+  <rect x="166" y="356" width="150" height="50" rx="9" fill="#FFFFFF" stroke="#D8D4C8"/>
+  <text x="241" y="377" font-size="12" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">faq-writer</text>
+  <text x="241" y="393" font-size="10.5" fill="#7C7A70" text-anchor="middle">reads the transcript</text>
+  <rect x="284" y="349" width="44" height="13" rx="6.5" fill="#F6E9EF" stroke="#DDB9CB"/>
+  <text x="306" y="358.5" font-size="8.5" fill="#9C4A74" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">memory</text>
+
+  <rect x="344" y="288" width="140" height="38" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="414" y="312" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">session-report.md</text>
+
+  <rect x="344" y="362" width="140" height="38" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="414" y="386" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">faq.md</text>
+
+  <rect x="504" y="282" width="150" height="50" rx="9" fill="#FFFFFF" stroke="#D8D4C8"/>
+  <text x="579" y="303" font-size="12" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">renderer</text>
+  <text x="579" y="319" font-size="10.5" fill="#7C7A70" text-anchor="middle">markdown to html</text>
+
+  <rect x="684" y="288" width="170" height="38" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="769" y="312" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">session-report.html</text>
+
+  <text x="524" y="372" font-size="11" fill="#7C7A70">Only the report is rendered.</text>
+  <text x="524" y="390" font-size="11" fill="#7C7A70">The FAQ ships as markdown.</text>
+
+  <path d="M140 330 L162 311" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M140 348 L162 379" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M316 307 L340 307" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M316 381 L340 381" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M484 307 L500 307" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M654 307 L680 307" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+
+  <!-- lane 3 : team -->
+  <rect x="16" y="448" width="868" height="196" rx="14" fill="none" stroke="#E7BCA6" stroke-dasharray="5 5"/>
+  <text x="36" y="474" font-size="13" font-weight="600" fill="#141413" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">/debrief-team 02</text>
+  <text x="190" y="474" font-size="12.5" fill="#A9543A">two teammates agree coverage, then write, then both render</text>
+  <text x="864" y="474" font-size="10.5" fill="#8A887E" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">LESSON 3</text>
+
+  <rect x="36" y="520" width="104" height="52" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="88" y="542" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">module-02</text>
+  <text x="88" y="557" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">.vtt</text>
+
+  <rect x="166" y="488" width="150" height="50" rx="9" fill="#FFFFFF" stroke="#D97757" stroke-width="1.5"/>
+  <text x="241" y="509" font-size="12" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">quiz-writer</text>
+  <text x="241" y="525" font-size="10.5" fill="#7C7A70" text-anchor="middle">picks the questions</text>
+  <rect x="284" y="481" width="44" height="13" rx="6.5" fill="#F6E9EF" stroke="#DDB9CB"/>
+  <text x="306" y="490.5" font-size="8.5" fill="#9C4A74" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">memory</text>
+
+  <rect x="166" y="568" width="150" height="50" rx="9" fill="#FFFFFF" stroke="#D97757" stroke-width="1.5"/>
+  <text x="241" y="589" font-size="12" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">flashcard-writer</text>
+  <text x="241" y="605" font-size="10.5" fill="#7C7A70" text-anchor="middle">picks the terms</text>
+  <rect x="284" y="561" width="44" height="13" rx="6.5" fill="#F6E9EF" stroke="#DDB9CB"/>
+  <text x="306" y="570.5" font-size="8.5" fill="#9C4A74" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">memory</text>
+
+  <path d="M241 542 L241 564" stroke="#D97757" stroke-width="1.5" fill="none" marker-end="url(#c)" marker-start="url(#cs)"/>
+
+  <rect x="344" y="494" width="140" height="38" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="414" y="518" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">quiz.md</text>
+
+  <rect x="344" y="574" width="140" height="38" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="414" y="598" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">flashcards.md</text>
+
+  <rect x="504" y="528" width="150" height="50" rx="9" fill="#FFFFFF" stroke="#D8D4C8"/>
+  <text x="579" y="549" font-size="12" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">renderer</text>
+  <text x="579" y="565" font-size="10.5" fill="#7C7A70" text-anchor="middle">runs twice</text>
+
+  <rect x="684" y="502" width="170" height="38" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="769" y="526" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">quiz.html</text>
+
+  <rect x="684" y="566" width="170" height="38" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="769" y="590" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">flashcards.html</text>
+
+  <path d="M140 536 L162 513" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M140 556 L162 593" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M316 513 L340 513" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M316 593 L340 593" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M484 513 L492 513 L492 553" stroke="#8A887E" fill="none"/>
+  <path d="M484 593 L492 593 L492 553" stroke="#8A887E" fill="none"/>
+  <path d="M492 553 L500 553" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M654 546 L668 546 L668 521 L680 521" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M654 560 L668 560 L668 585 L680 585" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+
+  <!-- lane 4 : memory and the vault -->
+  <rect x="16" y="660" width="868" height="122" rx="14" fill="none" stroke="#DDB9CB" stroke-dasharray="5 5"/>
+  <text x="36" y="686" font-size="13" font-weight="600" fill="#141413" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">/vault:wiki-update 02</text>
+  <text x="222" y="686" font-size="12.5" fill="#9C4A74">runs last, one writer, pages that accumulate</text>
+  <text x="864" y="686" font-size="10.5" fill="#8A887E" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">LESSON 4</text>
+
+  <rect x="36" y="704" width="104" height="52" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="88" y="726" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">outputs/</text>
+  <text x="88" y="741" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">module-02/</text>
+
+  <rect x="166" y="705" width="150" height="50" rx="9" fill="#FFFFFF" stroke="#9C4A74" stroke-width="1.5"/>
+  <text x="241" y="726" font-size="12" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">wiki-keeper</text>
+  <text x="241" y="742" font-size="10.5" fill="#9C4A74" text-anchor="middle">the only vault writer</text>
+
+  <rect x="344" y="711" width="140" height="38" rx="7" fill="#F6E9EF" stroke="#DDB9CB"/>
+  <text x="414" y="735" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">vault/</text>
+
+  <text x="504" y="720" font-size="11" fill="#7C7A70">Concept, people and session pages.</text>
+  <text x="504" y="738" font-size="11" fill="#7C7A70">Grows with every module.</text>
+
+  <rect x="720" y="704" width="140" height="52" rx="7" fill="#F6E9EF" stroke="#DDB9CB"/>
+  <text x="790" y="726" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">.claude/</text>
+  <text x="790" y="741" font-size="11" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">agent-memory/</text>
+  <text x="790" y="765" font-size="9.5" fill="#9C4A74" text-anchor="middle">where the notebooks live</text>
+
+  <path d="M140 730 L162 730" stroke="#9C4A74" fill="none" marker-end="url(#v)"/>
+  <path d="M316 730 L340 730" stroke="#9C4A74" fill="none" marker-end="url(#v)"/>
+
+  <text x="20" y="806" font-size="11" fill="#7C7A70">Four commands, one per lesson. One transcript in; five documents, three HTML pages and a growing vault out. The only arrow</text>
+  <text x="20" y="822" font-size="11" fill="#7C7A70">that runs between two writers is the clay one in lane 3.</text>
+</svg>

@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="664" viewBox="0 0 900 664" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8A887E"/>
+    </marker>
+  </defs>
+  <rect width="900" height="664" fill="#FAF9F5"/>
+
+  <text x="20" y="32" font-size="14" font-weight="600" fill="#141413" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">/debrief 02</text>
+  <text x="140" y="32" font-size="13" fill="#7C7A70">the work happens somewhere your context never goes</text>
+
+  <!-- lane 1 : your chat -->
+  <rect x="16" y="52" width="868" height="112" rx="12" fill="#FBEFE9" stroke="#E7BCA6"/>
+  <text x="36" y="76" font-size="11" fill="#A9543A" font-weight="600">YOUR CHAT</text>
+
+  <rect x="36" y="90" width="150" height="52" rx="9" fill="#FFFFFF" stroke="#D97757" stroke-width="1.5"/>
+  <text x="111" y="112" font-size="12" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">/debrief 02</text>
+  <text x="111" y="128" font-size="10.5" fill="#7C7A70" text-anchor="middle">a skill, the runbook</text>
+
+  <text x="560" y="88" font-size="10.5" fill="#A9543A">YOUR CONTEXT WINDOW</text>
+  <rect x="560" y="98" width="300" height="22" rx="6" fill="#FFFFFF" stroke="#E7BCA6"/>
+  <rect x="561" y="99" width="34" height="20" rx="5" fill="#8FA88B"/>
+  <text x="560" y="138" font-size="11" fill="#7C7A70">only short summaries come back into it</text>
+
+  <!-- lane 2 : the three workers -->
+  <rect x="16" y="244" width="868" height="360" rx="12" fill="#FFFFFF" stroke="#D8D4C8"/>
+  <text x="36" y="268" font-size="11" fill="#7C7A70" font-weight="600">SUB-AGENTS &#183; one context window each, and none of it is yours</text>
+
+  <rect x="140" y="280" width="250" height="98" rx="9" fill="#FAF9F5" stroke="#D8D4C8"/>
+  <text x="158" y="302" font-size="12" fill="#141413" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">report-writer</text>
+  <rect x="158" y="312" width="214" height="16" rx="4" fill="#FFFFFF" stroke="#D8D4C8"/>
+  <rect x="159" y="313" width="188" height="14" rx="3" fill="#C8785C"/>
+  <text x="158" y="345" font-size="10.5" fill="#7C7A70">its own context, filled by the transcript</text>
+  <text x="158" y="364" font-size="10.5" fill="#7C7A70" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">tools: Read, Write</text>
+
+  <rect x="470" y="280" width="250" height="98" rx="9" fill="#FAF9F5" stroke="#D8D4C8"/>
+  <text x="488" y="302" font-size="12" fill="#141413" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">faq-writer</text>
+  <rect x="488" y="312" width="214" height="16" rx="4" fill="#FFFFFF" stroke="#D8D4C8"/>
+  <rect x="489" y="313" width="188" height="14" rx="3" fill="#C8785C"/>
+  <text x="488" y="345" font-size="10.5" fill="#7C7A70">its own context, filled by the transcript</text>
+  <text x="488" y="364" font-size="10.5" fill="#7C7A70" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">tools: Read, Write</text>
+
+  <text x="740" y="322" font-size="10.5" fill="#7C7A70">these two run</text>
+  <text x="740" y="337" font-size="10.5" fill="#7C7A70">at the same moment</text>
+
+  <!-- each writer writes its own file -->
+  <path d="M265 378 L265 398" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M595 378 L595 398" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <text x="275" y="392" font-size="10" fill="#7C7A70">writes</text>
+  <text x="605" y="392" font-size="10" fill="#7C7A70">writes</text>
+
+  <rect x="180" y="402" width="170" height="36" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="265" y="425" font-size="11.5" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">session-report.md</text>
+  <rect x="510" y="402" width="170" height="36" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="595" y="425" font-size="11.5" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">faq.md</text>
+
+  <rect x="696" y="409" width="150" height="22" rx="11" fill="#FFFFFF" stroke="#D8D4C8"/>
+  <text x="771" y="424" font-size="10.5" fill="#5A5952" text-anchor="middle">done &#183; ships as markdown</text>
+
+  <!-- the report goes on to the renderer -->
+  <path d="M36 460 L864 460" stroke="#E4E0D6" stroke-dasharray="4 4"/>
+  <path d="M265 438 L265 478" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <rect x="275" y="449" width="170" height="20" rx="4" fill="#FFFFFF"/>
+  <text x="280" y="463" font-size="10.5" fill="#7C7A70">waits until the report exists</text>
+
+  <rect x="140" y="482" width="250" height="98" rx="9" fill="#FAF9F5" stroke="#D8D4C8"/>
+  <text x="158" y="504" font-size="12" fill="#141413" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">renderer</text>
+  <rect x="158" y="514" width="214" height="16" rx="4" fill="#FFFFFF" stroke="#D8D4C8"/>
+  <rect x="159" y="515" width="96" height="14" rx="3" fill="#C8785C"/>
+  <text x="158" y="547" font-size="10.5" fill="#7C7A70">its own context, filled by the page template</text>
+  <text x="158" y="566" font-size="10.5" fill="#7C7A70" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">tools: Read, Write &#183; skills: beautiful-html</text>
+
+  <path d="M390 531 L456 531" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <text x="398" y="524" font-size="10" fill="#7C7A70">writes</text>
+  <rect x="460" y="513" width="190" height="36" rx="7" fill="#F1EEE4" stroke="#E4E0D4"/>
+  <text x="555" y="536" font-size="11.5" fill="#141413" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">session-report.html</text>
+
+  <text x="676" y="516" font-size="10.5" fill="#7C7A70">an agent that uses a skill:</text>
+  <text x="676" y="531" font-size="10.5" fill="#7C7A70">beautiful-html is the knowledge,</text>
+  <text x="676" y="546" font-size="10.5" fill="#7C7A70">the renderer is who applies it</text>
+
+  <!-- launch -->
+  <path d="M90 142 L90 200 L230 200 L230 276" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <path d="M90 142 L90 200 L560 200 L560 276" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <text x="104" y="194" font-size="10.5" fill="#7C7A70">launches both at once</text>
+
+  <!-- return -->
+  <path d="M320 276 L320 226 L820 226" stroke="#8A887E" fill="none"/>
+  <path d="M650 276 L650 226" stroke="#8A887E" fill="none"/>
+  <path d="M820 226 L820 126" stroke="#8A887E" fill="none" marker-end="url(#g)"/>
+  <text x="336" y="220" font-size="10.5" fill="#7C7A70">each returns a summary, not its transcript</text>
+
+  <text x="20" y="632" font-size="11" fill="#7C7A70">None of the three ever messages another, and here that is correct. The two writers each cover everything in their own</text>
+  <text x="20" y="648" font-size="11" fill="#7C7A70">document, so neither makes a choice that affects the other, and the renderer is simply handed a report that is already finished.</text>
+</svg>

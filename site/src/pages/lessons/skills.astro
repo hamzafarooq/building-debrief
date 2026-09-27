@@ -1,0 +1,78 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import LessonHeader from '@/components/LessonHeader.astro';
+import Step from '@/components/Step.astro';
+import CodeBlock from '@/components/CodeBlock.astro';
+import Prompt from '@/components/Prompt.astro';
+import Note from '@/components/Note.astro';
+import Annotated from '@/components/Annotated.astro';
+import Figure from '@/components/Figure.astro';
+import TerminalReplay from '@/islands/TerminalReplay';
+import Check from '@/islands/Check';
+import Scoreboard from '@/components/Scoreboard.astro';
+import { stepId } from '@/lib/lessons';
+import { skillScript, skillMeters, skillLanes } from '@/content/replays';
+import skill from '@/content/files/claude/skills/recap-email/SKILL.md?raw';
+const L = 'skills';
+---
+<Layout title="Skills" slug={L}>
+  <LessonHeader slug={L} goal="Build your first command. A skill turns a repeatable task into something you can run in one line. It is the simplest of the four mechanisms, and the one most of your work will turn out to need." />
+
+  <div class="prose-lesson mb-6 max-w-2xl">
+    <p><strong>A skill turns a repeatable task into a command.</strong> You work out how the job should be done once, write it down in a file, and from then on you type <code>/name</code> instead of explaining it again. The file holds everything you would otherwise have to say from scratch each time: the shape of the output, the rules for producing it, the steps to take in order.</p>
+    <p><strong>The property that matters most is where a skill runs.</strong> It runs in your own chat. There is no separate workspace and nothing happens in parallel, so whatever the skill has to read lands in front of you and stays there. Hold on to that until step 3, where you can watch it happen.</p>
+  </div>
+
+  <Figure src="/img/skills.svg" alt="Diagram. A SKILL.md file holds a name, a description, an argument hint, a template and rules. Typing slash name runs it in your own chat, so your context fills with whatever the skill reads, and the output comes out the same shape every time. Below, two kinds of skill. Format skills say what good output looks like: recap-email writes the email that goes out after each class, with the same subject, sections and sign-off; beautiful-html turns a finished markdown document into a styled web page from one fixed template. Button skills write nothing themselves and start agents in order: debrief starts the report and FAQ writers at once, then hands the report to the renderer; debrief-team puts the quiz and flashcard writers in a team that agrees coverage before both write." caption="Where a skill runs, and the two kinds you will meet in this project." width={900} height={484} />
+
+  <div class="prose-lesson my-8 max-w-2xl">
+    <p><strong>The problem skills solve is inconsistency, not effort.</strong> Writing a recap email is not hard. Writing it the same way every week, with the same subject line and the same closing lines, is the part people get wrong. Put the format in a file and that stops being a discipline problem.</p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">The skills in this project</h2>
+  <p class="text-ink-2 mb-4 max-w-2xl text-[15px]">Four repeatable tasks, written down once each. Two of them describe what good output looks like. The other two are runbooks, because starting other things in the right order is a repeatable task too. You build the first on this page.</p>
+  <Annotated title="What each one is for" items={[
+    ['recap-email  · Lesson 1', 'The email that goes out after every class has the same shape every week. This file holds that shape: the subject line, the sections, the two closing lines, a word limit. Change it here and every future email changes.'],
+    ['beautiful-html  · Lesson 2', 'Turning a finished markdown document into a page worth sending is the same job every time. This file holds the template and how to fit the content onto it. You drop it in rather than write it.'],
+    ['debrief  · Lesson 2', 'Not a format but an order, and getting that order right every week is itself a repeatable task. It checks the transcript exists, starts two writers at the same moment, waits for the report, then starts the renderer. It writes nothing itself. Those writers are sub-agents, which Lesson 2 goes into properly.'],
+    ['debrief-team  · Lesson 3', 'The same idea for two writers whose choices collide. It puts them in a team, states the rules they hold each other to, and lets them write only once both have agreed. That arrangement is an agent team, and Lesson 3 is about why these two need one.'],
+  ]} />
+
+  <div class="space-y-4 mt-10">
+    <Step lesson={L} step="skill-file" n={1} title="Write the recap-email skill">
+      <p>A skill is a folder with one file inside it, always named <code>SKILL.md</code>. The folder name becomes the command, so <code>.claude/skills/recap-email/</code> gives you <code>/recap-email</code>.</p>
+      <p class="mb-2"><strong>To create it:</strong> in VS Code, right-click the <code>.claude/skills</code> folder, choose <strong>New Folder</strong>, name it <code>recap-email</code>. Right-click that new folder, choose <strong>New File</strong>, name it <code>SKILL.md</code>, and paste this in.</p>
+      <CodeBlock file=".claude/skills/recap-email/SKILL.md" code={skill} />
+      <Prompt text={`Create .claude/skills/recap-email/SKILL.md. It should run as /recap-email NN, read transcript/module-NN.vtt in full, and write outputs/module-NN/recap-email.md from a fixed template: a subject line "Module NN recap and next steps", a warm opening sentence, "What we covered" (five to eight bullets, only topics the instructors taught), "Announcements and instructions", "Next steps", then two mandatory closing lines (contact course staff; where the resources are) and a sign-off. Under 350 words. Never invent a deadline.`} />
+    </Step>
+
+    <Step lesson={L} step="run" n={2} title="Run it">
+      <p>Go back to your Claude Code chat and type the command. The skill loads, Claude reads the transcript, and the email appears in a new file.</p>
+      <CodeBlock file="in your Claude Code chat" code={`/recap-email 02`} />
+      <p>It will take a minute or two, because the whole transcript has to be read. When it finishes, open <code>outputs/module-02/recap-email.md</code> in VS Code and check three things: the subject line matches, there are five to eight bullets under "What we covered", and the last two lines before the sign-off are both there.</p>
+    </Step>
+
+    <Step lesson={L} step="inspect" n={3} title="Look at what it cost you">
+      <p>Claude can only hold so much in mind at once. That budget is called the context window, and this one holds about 200,000 tokens, which is roughly 150,000 words. Below is a replay of what happened in our chat when we ran the command. Press play and watch the bar on the right.</p>
+    </Step>
+  </div>
+
+  <div class="mt-4">
+    <TerminalReplay client:visible script={skillScript} meters={skillMeters} lanes={skillLanes} lanesTitle="What got loaded" />
+  </div>
+
+  <div class="prose-lesson mt-8 max-w-2xl">
+    <p>The transcript is now sitting in your chat, taking up about a quarter of the budget. That is fine once. But you have four more documents to produce, and four more reads like that will not fit. The striped part of the bar is what they would need.</p>
+    <p>You could open a fresh chat for each document. Then you are waiting for four reads one after another, and you have four conversations to keep track of. The next lesson is about doing the reading somewhere else entirely.</p>
+  </div>
+
+  <h2 class="text-xl font-semibold mt-12 mb-3">Check</h2>
+  <p class="text-ink-2 mb-4">Two questions. Get them both right and step 4 marks itself done.</p>
+  <Check client:visible id={stepId(L, 'check')} questions={[
+    { q: 'Where does a skill run?', options: ['In a separate workspace, alongside your chat', 'In your own chat, so everything it reads lands in your context', 'On Anthropic servers, with nothing kept locally'], answer: 1, why: 'A skill is instructions loaded into the conversation you are already having. There is no separate workspace, which is why the transcript ends up in your window and stays there.' },
+    { q: 'What problem is the recap-email skill solving?', options: ['The email is hard to write', 'The email has to come out the same way every week', 'The transcript is too long to read'], answer: 1, why: 'The cost of doing it by hand is inconsistency, not effort. Putting the format in a file means it no longer depends on anyone remembering.' },
+  ]} />
+
+  <Scoreboard done={['recap-email.md']}
+    note="One of the five, and more importantly one mechanism understood. A repeatable task written down once, running in your own chat, which is why the transcript is now sitting in your context. The next lesson produces two more documents without that happening." />
+</Layout>

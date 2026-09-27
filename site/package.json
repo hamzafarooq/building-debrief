@@ -1,0 +1,25 @@
+{
+  "name": "building-debrief",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run sync && astro dev",
+    "prebuild": "node scripts/sync-files.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "sync": "node scripts/sync-files.mjs"
+  },
+  "dependencies": {
+    "@astrojs/react": "^6.0.6",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.3",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0"
+  }
+}

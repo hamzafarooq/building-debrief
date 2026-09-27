@@ -1,0 +1,52 @@
+---
+import '@/styles/global.css';
+import ProgressNav from '@/islands/ProgressNav';
+import LessonGate from '@/islands/LessonGate';
+import LessonNav from '@/islands/LessonNav';
+import { LESSONS } from '@/lib/lessons';
+
+interface Props { title: string; slug?: string; description?: string }
+const { title, slug, description = 'A lesson site that teaches product managers how to build skills, sub-agents, agent teams and a memory layer in Claude Code.' } = Astro.props;
+// Every step id of the lessons before this one, for the pre-paint lock check.
+const idx = slug ? LESSONS.findIndex((l) => l.slug === slug) : -1;
+const required = idx > 0 ? LESSONS.slice(0, idx).flatMap((l) => l.steps.map((s) => `${l.slug}:${s}`)) : [];
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title} · Building Debrief</title>
+  <meta name="description" content={description} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  {required.length > 0 && (
+    <script is:inline define:vars={{ required }}>
+      try {
+        const done = JSON.parse(localStorage.getItem('bd:progress:v1') || '{}');
+        if (required.some((id) => !done[id])) document.documentElement.setAttribute('data-locked', '');
+      } catch { /* storage unavailable: the island decides after hydration */ }
+    </script>
+  )}
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="lg:grid lg:grid-cols-[260px_minmax(0,1fr)] min-h-screen">
+    <aside class="border-b lg:border-b-0 lg:border-r border-line bg-white/60 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
+      <div class="px-5 py-5">
+        <a href="/" class="block font-semibold tracking-tight text-lg">Building Debrief</a>
+        <p class="text-xs text-ink-3 font-mono mt-1">skills · sub-agents · teams · memory</p>
+      </div>
+      <ProgressNav client:load current={slug ?? ''} />
+    </aside>
+    <main class="px-4 sm:px-8 lg:px-12 py-10 lg:py-14 max-w-4xl w-full">
+      {slug && <LessonGate client:load slug={slug} />}
+      <div class="lesson-body">
+        <slot />
+        {slug && <LessonNav client:load slug={slug} />}
+      </div>
+    </main>
+  </div>
+</body>
+</html>

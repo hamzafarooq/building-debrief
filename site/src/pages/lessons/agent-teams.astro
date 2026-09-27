@@ -1,0 +1,125 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import LessonHeader from '@/components/LessonHeader.astro';
+import Step from '@/components/Step.astro';
+import CodeBlock from '@/components/CodeBlock.astro';
+import Note from '@/components/Note.astro';
+import Figure from '@/components/Figure.astro';
+import TeamReplay from '@/islands/TeamReplay';
+import FlowReplay from '@/islands/FlowReplay';
+import Check from '@/islands/Check';
+import Scoreboard from '@/components/Scoreboard.astro';
+import { stepId } from '@/lib/lessons';
+import { teamScript, teamFlowNodes, teamFlowEdges, teamFlowScript, teamFlowFinal } from '@/content/replays';
+import settings from '@/content/files/claude/settings.json?raw';
+import quizWriter from '@/content/files/claude/agents/quiz-writer.md?raw';
+import flashcardWriter from '@/content/files/claude/agents/flashcard-writer.md?raw';
+import debriefTeam from '@/content/files/claude/skills/debrief-team/SKILL.md?raw';
+const L = 'agent-teams';
+---
+<Layout title="Agent teams" slug={L}>
+  <LessonHeader slug={L} goal="Produce the quiz and the flashcards as two agents that agree what to cover before either one starts writing. A team is for the one problem neither a skill nor a sub-agent can solve: two agents that need to talk to each other." />
+
+  <div class="prose-lesson mb-6 max-w-2xl">
+    <p><strong>Anthropic's documentation defines it plainly.</strong> Agent teams "let you coordinate multiple Claude Code instances working together. One session acts as the team lead, coordinating work, assigning tasks, and synthesizing results. Teammates work independently, each in its own context window, and communicate directly with each other."</p>
+    <p>One word there is the whole lesson: <em>directly</em>. In Lesson 2 each agent went off alone and reported back to you, and nothing it worked out ever reached the other one. Teammates message each other without going through you, and they keep going until they agree.</p>
+    <p><strong>This is an experimental feature.</strong> The documentation says so in as many words: "Agent teams are experimental and disabled by default." It also lists known limitations around session resumption, task coordination and shutdown, and warns that teams "use significantly more tokens than a single session", because each teammate is a separate instance of Claude rather than a summary. You switch them on with a setting that is read when the session starts, which is step 1 below.</p>
+  </div>
+
+  <h2 class="text-xl font-semibold mt-10 mb-2">How a team differs from the agents you already built</h2>
+  <p class="text-ink-2 mb-4 max-w-2xl text-[15px]">Anthropic's own comparison, alongside what it means for this project.</p>
+  <div class="overflow-x-auto rounded-xl border border-line bg-white mb-8">
+    <table class="w-full text-sm">
+      <thead><tr class="text-left font-mono text-[11px] uppercase tracking-wider text-ink-3"><th class="p-3"></th><th class="p-3">Sub-agents · Lesson 2</th><th class="p-3">Agent teams · here</th></tr></thead>
+      <tbody class="divide-y divide-line align-top">
+        <tr><td class="p-3 font-medium whitespace-nowrap">Communication</td><td class="p-3">Return a result to the caller</td><td class="p-3 text-team">Teammates message each other directly</td></tr>
+        <tr><td class="p-3 font-medium whitespace-nowrap">Coordination</td><td class="p-3">Main agent manages all work</td><td class="p-3 text-team">Self-coordination through messages, plus a shared task list</td></tr>
+        <tr><td class="p-3 font-medium whitespace-nowrap">Best for</td><td class="p-3">Focused tasks where only the result matters</td><td class="p-3 text-team">Complex work requiring discussion and collaboration</td></tr>
+        <tr><td class="p-3 font-medium whitespace-nowrap">Token cost</td><td class="p-3">Lower: results summarized back to main context</td><td class="p-3 text-team">Higher: each teammate is a separate Claude instance</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="text-xl font-semibold mt-10 mb-2">The problem we are solving</h2>
+  <div class="prose-lesson mb-6 max-w-2xl">
+    <p>The quiz picks eight questions. The flashcards pick twelve terms. A student revises with both. If the quiz asks about something the cards never define, someone who memorised every single card still fails that question.</p>
+    <p><strong>Neither agent can prevent that alone</strong>, and this is the part worth sitting with. It is not that the job is large, or slow, or that either one is short of context. It is that the thing each agent needs to know is sitting in the other one's head at exactly the moment it is needed. There is no result to summarise and hand back, because the decision has not been made yet. They have to talk.</p>
+    <p>So they work under two rules, and neither rule can be checked by one agent on its own:</p>
+    <ul>
+      <li>If the quiz tests a term, a card defines it.</li>
+      <li>If a card defines a term, something in the kit uses it.</li>
+    </ul>
+  </div>
+
+  <Figure src="/img/agent-team.svg" alt="Diagram. quiz-writer and flashcard-writer exchange four messages: the questions and the terms each leans on, the terms intended for cards, a complaint that a question needs an uncarded term, a reply naming two cards nothing uses, and agreement on the swap. Both lists agreed, each writes once, producing quiz.md and flashcards.md, which the renderer converts to HTML. A note says the renderer is an ordinary sub-agent, not a teammate, because it has nothing to negotiate." caption="The exchange that no single agent could have had with itself. The writing order comes later, in step 4." width={900} height={700} />
+
+  <h2 class="text-xl font-semibold mt-10 mb-2">Watch it run</h2>
+  <p class="text-ink-2 mb-4 max-w-2xl text-[15px]">Our real <code class="font-mono text-[0.88em]">/debrief-team 02</code>, step by step. Watch the line between the two teammates: it is the only place in this whole project where two agents talk to each other. Their messages appear underneath, and the two rules at the top left turn from broken to holding.</p>
+  <FlowReplay client:visible nodes={teamFlowNodes} edges={teamFlowEdges} script={teamFlowScript} finalTitle="returned by debrief-team" final={teamFlowFinal} label="/debrief-team 02" height={640} />
+
+
+
+  <div class="space-y-4 mt-10">
+    <Step lesson={L} step="flag" n={1} title="Turn teams on">
+      <p>Teams are still experimental, so they are off unless you switch them on. The setting is read when Claude Code starts, which means you have to restart it afterwards.</p>
+      <p class="mb-2"><strong>To create it:</strong> make a file called <code>settings.json</code> inside your <code>.claude</code> folder, paste this in, save, then close Claude Code and run <code>claude</code> again.</p>
+      <CodeBlock file=".claude/settings.json" code={settings} />
+    </Step>
+
+    <Step lesson={L} step="quiz-writer" n={2} title="Build the agent quiz-writer">
+      <p>Most of this file looks like the agents from Lesson 2. The new part is the section telling it to agree coverage before it writes a word.</p>
+      <CodeBlock file=".claude/agents/quiz-writer.md" code={quizWriter} />
+    </Step>
+
+    <Step lesson={L} step="flashcard-writer" n={3} title="Build the agent flashcard-writer">
+      <p>The mirror image of the last one, with one extra line at the top.</p>
+      <CodeBlock file=".claude/agents/flashcard-writer.md" code={flashcardWriter} />
+    </Step>
+
+    <Step lesson={L} step="debrief-team" n={4} title="Write the runbook that runs the team">
+      <p><strong>What you are after:</strong> one command that produces a quiz and a deck which actually work together, without you ever having to referee the two agents that wrote them.</p>
+      <p>This runbook has more to arrange than <code>/debrief</code> did. There, the two agents started together, finished, and were done. Here they have to reach an agreement before either one writes, and an agreement is not something you can launch and walk away from. So the file walks them through three distinct phases, and only the first of the three is concurrent.</p>
+      <ol class="list-decimal pl-5 space-y-2 mb-4">
+        <li><strong>They talk.</strong> Both post the list they intend to write, read the other's, and say what they need. They trade until both rules hold and neither is over its count. Nothing at all is written in this phase, which is the point: it is cheap to change your mind about a list and expensive to change your mind about a file.</li>
+        <li><strong>They write, one at a time.</strong> <code>quiz-writer</code> goes first, because its answers are pinned to exact timestamps and have the least room to move. When it reports, <code>flashcard-writer</code> opens the finished <code>quiz.md</code> and writes against what is in that file, not against the list agreed a moment ago. Never both at once.</li>
+        <li><strong>You check.</strong> Read both finished files yourself and test the two rules against what is actually written. If either fails, exactly one agent fixes it and you check again. Nothing gets rendered until it passes.</li>
+      </ol>
+      <p>The file also tells you, the lead, to stay out of the coverage argument entirely. That is the instruction people are most tempted to ignore, and the reason it is there is worth stating plainly. Your chat could compare the two finished files and spot a mismatch easily enough. But to decide <em>which</em> of them should change, it would have to read the transcript and both drafts, and at that point it is writing the documents rather than coordinating them. The two agents already hold their own constraints, so they can settle it between themselves in a single exchange.</p>
+      <CodeBlock file=".claude/skills/debrief-team/SKILL.md" code={debriefTeam} />
+    </Step>
+
+    <Step lesson={L} step="run" n={5} title="Run it">
+      <CodeBlock file="in your Claude Code chat" code={`/debrief-team 02`} />
+      <p>Watch the two post their lists, find the gap, and trade slots. Here is our run, with the trade that actually happened.</p>
+    </Step>
+  </div>
+
+  <div class="mt-4"><TeamReplay client:visible script={teamScript} /></div>
+
+  <div class="prose-lesson mt-8 max-w-2xl">
+    <p>Read the trade again, because it is the whole lesson in four messages. The flashcard writer says it owes two cards and is full. The quiz writer names two cards that nothing uses and offers to weaken one of its own questions. The flashcard writer swaps them. Twelve cards before, twelve after, and now every term the quiz tests has a card behind it.</p>
+    <p>Neither of them could have found that on their own, and you never had to arbitrate.</p>
+    <p><strong>Then notice what happens after they agree.</strong> They stop talking and write in turn. The quiz goes first, the flashcards read the finished quiz off disk, and only then does the lead check both files. That sequence is not fussiness. It comes from a real run where the two agreed a perfectly good pair of lists, then wrote and rewrote against each other for four rounds, each acting on a message the other had already replaced. Twice the files on disk broke the rules the two had just agreed. The lists were never the problem. Writing at the same time was.</p>
+  </div>
+
+  <h2 class="text-xl font-semibold mt-12 mb-2">What is in the outputs folder now</h2>
+  <p class="text-ink-2 mb-4 max-w-2xl text-[15px]">Four more files in <code>outputs/module-02/</code>, which completes the set.</p>
+  <CodeBlock file="outputs/module-02/" code={`recap-email.md        Lesson 1\nsession-report.md     Lesson 2\nfaq.md                Lesson 2\nsession-report.html   Lesson 2\nquiz.md               new\nflashcards.md         new\nquiz.html             new\nflashcards.html       new`} />
+  <div class="prose-lesson max-w-2xl">
+    <ul>
+      <li><strong>quiz.md</strong> holds eight questions, early in the session to late, each answer ending with the one timestamp where an instructor said it. Nothing the instructors deferred to a later session is tested.</li>
+      <li><strong>flashcards.md</strong> holds twelve cards as a table, ordered by when each term first came up. Fronts are five words or fewer, backs are a single sentence.</li>
+      <li><strong>quiz.html</strong> and <strong>flashcards.html</strong> are the same two as styled pages, ten slides and six.</li>
+    </ul>
+    <p>Now do the check the team did. Take any term the quiz tests and find its card. Then take any card and find what uses it. Both directions should hold, and they should hold against these files rather than against anything the two agreed on the way.</p>
+  </div>
+
+  <h2 class="text-xl font-semibold mt-12 mb-3">Check</h2>
+  <Check client:visible id={stepId(L, 'check')} questions={[
+    { q: 'What makes the quiz and flashcards a team problem rather than a sub-agent problem?', options: ['They are longer than the report', "One writer's choice constrains the other's, and neither can know it in advance", 'They need different models'], answer: 1, why: 'It is a blind spot neither can see alone. Sub-agents cannot talk to each other; teammates can.' },
+    { q: 'What does the lead do during the negotiation?', options: ['Decides which document should change', 'Stays out of it and waits for both to confirm', 'Reads the transcript to check both lists'], answer: 1, why: 'Only the two writers know their own constraints. A lead that read everything in order to arbitrate would be doing the writing itself.' },
+  ]} />
+
+  <Scoreboard done={['recap-email.md', 'session-report.md', 'faq.md', 'quiz.md', 'flashcards.md']}
+    note="All five. The recap email came from a skill, the report and the FAQ from sub-agents working alone, and the quiz and flashcards from two agents that had to agree first. Three mechanisms, chosen by the shape of the problem rather than by how impressive they sound. Lesson 4 adds nothing to this list; it is about what survives to next week." />
+</Layout>

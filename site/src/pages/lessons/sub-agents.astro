@@ -1,0 +1,124 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import LessonHeader from '@/components/LessonHeader.astro';
+import Step from '@/components/Step.astro';
+import CodeBlock from '@/components/CodeBlock.astro';
+import Prompt from '@/components/Prompt.astro';
+import Note from '@/components/Note.astro';
+import Annotated from '@/components/Annotated.astro';
+import Figure from '@/components/Figure.astro';
+import TerminalReplay from '@/islands/TerminalReplay';
+import FlowReplay from '@/islands/FlowReplay';
+import Check from '@/islands/Check';
+import Scoreboard from '@/components/Scoreboard.astro';
+import { stepId } from '@/lib/lessons';
+import { subScript, subMeters, subLanes, subFlowNodes, subFlowEdges, subFlowScript, subFlowFinal } from '@/content/replays';
+import reportWriter from '@/content/files/claude/agents/report-writer.md?raw';
+import faqWriter from '@/content/files/claude/agents/faq-writer.md?raw';
+import renderer from '@/content/files/claude/agents/renderer.md?raw';
+import beautiful from '@/content/files/claude/skills/beautiful-html/SKILL.md?raw';
+import debrief from '@/content/files/claude/skills/debrief/SKILL.md?raw';
+const L = 'sub-agents';
+---
+<Layout title="Sub-agents" slug={L}>
+  <LessonHeader slug={L} goal="Produce the session report and the FAQ without the transcript ever entering your chat. A sub-agent is a separate agent you hand a job to, and it does the reading somewhere your own context never goes." />
+
+  <div class="prose-lesson mb-6 max-w-2xl">
+    <p><strong>A sub-agent is an agent with its own context window and its own tool list.</strong> You describe the job once in a file, hand the work over, and it goes away, does it, and comes back with a short summary. Everything it had to read to get there stays in its window and never enters yours.</p>
+    <p><strong>The problem sub-agents solve is context and waiting.</strong> Several jobs each need to read something large. Done in your own chat they fill your context and queue up behind one another. Handed to separate agents they run at the same time, each in its own window, and what comes back to you is a summary rather than the source.</p>
+  </div>
+
+<Figure src="/img/sub-agents.svg" alt="Diagram. Typing slash debrief 02 in your chat launches report-writer and faq-writer at the same moment. Each has its own context window filled by the transcript, and tools limited to Read and Write, and each returns only a short summary to your context. report-writer writes session-report.md and faq-writer writes faq.md. faq.md is done and ships as markdown. session-report.md goes on to the renderer, which waits until the report exists, fills its own context with the page template, and writes session-report.html. A note says none of the three ever messages another, and here that is correct." caption="Three agents, three context windows, none of them yours. Two markdown files come out of the writers; only the report goes on to become a web page." width={900} height={664} />
+
+  <h2 class="text-xl font-semibold mt-10 mb-2">Watch it run</h2>
+  <p class="text-ink-2 mb-4 max-w-2xl text-[15px]">The same picture, moving. This is our real <code class="font-mono text-[0.88em]">/debrief 02</code> run, step by step. The small bar on each box is that agent's own context filling up, and each sub-agent lists the tools it is allowed and any skill it loads.</p>
+  <FlowReplay client:visible nodes={subFlowNodes} edges={subFlowEdges} script={subFlowScript} finalTitle="returned by debrief" final={subFlowFinal} label="/debrief 02" height={548} />
+
+
+  <h2 class="text-xl font-semibold mt-10 mb-2">The agents in this project</h2>
+  <p class="text-ink-2 mb-4 max-w-2xl text-[15px]">Three jobs handed out, each described in its own file. Later lessons add more agents, but these are the ones you write here.</p>
+  <Annotated title="What each one is for" items={[
+    ['report-writer', 'Reads the whole transcript and writes the session report: every topic, in the order taught, with the timestamp where it starts. It covers everything, so it has nothing to agree with anyone about.'],
+    ['faq-writer', 'Reads the same transcript at the same moment, in its own window, and writes every student question with who answered it. Two full reads, one wait.'],
+    ['renderer', 'Turns one finished markdown file into a styled page. An agent that uses a skill: beautiful-html is the knowledge, this is who applies it. It waits for the report, because it cannot render a file that does not exist yet.'],
+  ]} />
+
+  <p class="text-ink-2 mt-8 mb-4 max-w-2xl text-[15px]">Five files to write on this page: three agents, one formatting skill, and one runbook that sets them going. Each is under forty lines, and afterwards you only ever type one command.</p>
+
+  <div class="space-y-4 mt-10">
+    <Step lesson={L} step="report-writer" n={1} title="Build the agent report-writer">
+      <p>An agent is one file in <code>.claude/agents/</code>. The top of the file says who it is, which model it runs on, and what it is allowed to touch. The rest is its job description.</p>
+      <p class="mb-2"><strong>To create it:</strong> right-click <code>.claude/agents</code> in VS Code, choose <strong>New File</strong>, name it <code>report-writer.md</code>, and paste this in.</p>
+      <CodeBlock file=".claude/agents/report-writer.md" code={reportWriter} />
+      <Prompt text={`Create .claude/agents/report-writer.md: a sub-agent with tools Read and Write only. It reads the whole transcript (CLAUDE.md says how), then writes session-report.md in the output folder: instructors and duration, every topic in transcript order with a start timestamp and two to five sentences, key concepts in the instructors' words, a Demos list and an Announcements list. It replies with the numbered topic list and writes nothing else.`} />
+    </Step>
+
+    <Step lesson={L} step="faq-writer" n={2} title="Build the agent faq-writer">
+      <p>Same shape, different job. This one collects every question a student asked, in the order they asked it, with who answered. Completeness matters more than polish here, so the instructions say so plainly.</p>
+      <CodeBlock file=".claude/agents/faq-writer.md" code={faqWriter} />
+    </Step>
+
+    <Step lesson={L} step="beautiful-html" n={3} title="Add the formatting skill">
+      <p>Turning a finished report into a page worth sending is the same job every week: the same template, the same way of splitting sections onto slides, the same choices about what goes on a cover. That makes it a repeatable task, and repeatable tasks belong in a skill.</p>
+      <p><code>report-writer</code> does not do any of it. It writes the markdown and stops. The formatting is picked up afterwards by the <code>renderer</code>, the agent you build in the next step, which applies this skill to whatever file it is handed.</p>
+      <p class="mb-2"><strong>To create it:</strong></p>
+      <ol class="list-decimal pl-5 space-y-1 mb-4">
+        <li>Make the folder <code>.claude/skills/beautiful-html</code>.</li>
+        <li>Add <code>SKILL.md</code> inside it, with the contents below.</li>
+        <li>Download the cartesian template into the same folder, named <code>cartesian.html</code>.</li>
+      </ol>
+      <p>That last one is the only command in this lesson you type into a terminal rather than into Claude. In VS Code choose <strong>View &rsaquo; Terminal</strong>, make sure you are at the top level of your project, and run this. If Claude Code is already running in that panel, open a second terminal with the <strong>+</strong> button instead of typing over it.</p>
+      <CodeBlock file="in the VS Code terminal, from your project folder" lang="shell" code={`curl -sL https://raw.githubusercontent.com/zarazhangrui/beautiful-html-templates/main/templates/cartesian/template.html -o .claude/skills/beautiful-html/cartesian.html`} />
+      <p>That download happens once, by you, now. From then on the template is a file in your project and the renderer reads it locally every run. It never goes to the internet, which is why the skill says "already downloaded. Read it, do not fetch."</p>
+      <CodeBlock file=".claude/skills/beautiful-html/SKILL.md" code={beautiful} />
+    </Step>
+
+    <Step lesson={L} step="renderer" n={4} title="Build the agent renderer">
+      <p>This is an agent that uses a skill. The skill is the knowledge, the agent is what applies it, and keeping them separate means you can change either one without touching the other. It also means the page template is loaded into this agent's own context and never into yours.</p>
+      <CodeBlock file=".claude/agents/renderer.md" code={renderer} />
+    </Step>
+
+    <Step lesson={L} step="debrief" n={5} title="Write the runbook that sets them going">
+      <p><strong>What you are after:</strong> typing one thing and getting three finished files, every week, without having to remember how the pieces fit together.</p>
+      <p>Right now you have three agents and a skill, and nothing that runs them. You could do it by hand: send the module and the paths to <code>report-writer</code>, send the same to <code>faq-writer</code>, remember to start them in the same turn so they read at once, wait for the report, then hand it to <code>renderer</code>. That works. It is also three chances every week to start them one after another by accident, or to render before there is anything to render.</p>
+      <p>Getting that order right is itself a repeatable task, so it belongs in a skill, exactly as the shape of the email did in Lesson 1. The difference is what the file holds. Lesson 1's skill held a format; this one holds a procedure. It writes nothing at all, and every word of the three documents still comes from the agents.</p>
+      <CodeBlock file=".claude/skills/debrief/SKILL.md" code={debrief} />
+    </Step>
+
+    <Step lesson={L} step="run" n={6} title="Run it">
+      <CodeBlock file="in your Claude Code chat" code={`/debrief 02`} />
+      <p>You should see two agents start at the same moment, then the renderer once the report is finished. Three files land in <code>outputs/module-02/</code>. Here is our run, replayed.</p>
+    </Step>
+  </div>
+
+  <div class="mt-4">
+    <TerminalReplay client:visible script={subScript} meters={subMeters} lanes={subLanes} lanesTitle="Sub-agents · .claude/agents/" />
+  </div>
+
+  <div class="prose-lesson mt-8 max-w-2xl">
+    <p>Compare the top bar with Lesson 1. Your chat never held the transcript. Each agent read the whole transcript in its own context, and what came back to you was a list of fifteen topic titles and the sentence "no deferred questions".</p>
+  </div>
+
+  <h2 class="text-xl font-semibold mt-12 mb-2">What is in the outputs folder now</h2>
+  <p class="text-ink-2 mb-4 max-w-2xl text-[15px]">Open <code>outputs/module-02/</code> in VS Code. Three of these are new; the email was already there from Lesson 1.</p>
+  <CodeBlock file="outputs/module-02/" code={`recap-email.md        from Lesson 1\nsession-report.md     new\nfaq.md                new\nsession-report.html   new`} />
+  <div class="prose-lesson max-w-2xl">
+    <ul>
+      <li><strong>session-report.md</strong> holds every topic in the order it was taught, fifteen of them for Module 02, each with the timestamp where it starts, then the demos and the announcements. This is the file a student reads when they missed the class.</li>
+      <li><strong>faq.md</strong> holds every question asked, twenty-two of them, in the order asked, with who asked and who answered. Its last line counts them and says how many the instructors deferred.</li>
+      <li><strong>session-report.html</strong> is that same report as a styled page, nineteen slides of it. Not a word of the content differs. Only the form does.</li>
+    </ul>
+    <p>Open the markdown report and the page side by side. If they disagree anywhere, the renderer has done something it was told not to do.</p>
+    <p>That is three of the five documents. The two still missing are the quiz and the flashcards, and they are missing for a reason: unlike these, they cannot be written independently. That is the subject of the next lesson.</p>
+  </div>
+
+  <h2 class="text-xl font-semibold mt-12 mb-3">Check</h2>
+  <Check client:visible id={stepId(L, 'check')} questions={[
+    { q: 'Why can the report and the FAQ be written by two independent agents?', options: ['They are both short', 'They are both exhaustive, so neither makes a choice that affects the other', 'They are written by different models'], answer: 1, why: 'Leave nothing out and there is no selection to coordinate. They only need to read a lot, which is what sub-agents are for.' },
+    { q: 'What does the tools line in an agent file actually do?', options: ['Suggests which tools the agent should prefer', 'Limits what the agent can do, and Claude Code enforces it', 'Lists tools you need to install first'], answer: 1, why: 'Writers hold Read and Write and nothing else. The limit is enforced by the software, so the instructions never have to ask politely.' },
+    { q: 'What comes back to your chat when an agent finishes?', options: ['Everything it read', 'A short summary', 'Nothing at all'], answer: 1, why: 'The transcript stays in that agent\'s own context. You get the topic list, or "no deferred questions", and that is all.' },
+  ]} />
+
+  <Scoreboard done={['recap-email.md', 'session-report.md', 'faq.md']}
+    note="Three of the five, and two mechanisms. The email came from a skill running in your chat; the report and the FAQ came from agents that read the transcript in their own. The two still missing are the two that cannot be written independently, which is what Lesson 3 is for." />
+</Layout>

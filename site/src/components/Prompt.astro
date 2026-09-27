@@ -1,0 +1,10 @@
+---
+// The "you do not have to copy-paste" alternative under a file step.
+interface Props { text: string }
+const { text } = Astro.props;
+---
+<details class="my-4 rounded-lg border border-dashed border-line-2 bg-white px-4 py-2.5 text-[14.5px]">
+  <summary class="cursor-pointer font-medium">Rather not copy and paste? Ask Claude Code to write it</summary>
+  <p class="mt-2 mb-2 text-ink-2">Paste this message into your Claude Code chat. It will create the file for you. Then open the file and compare it with the one above, because reading it is the part that teaches you something.</p>
+  <pre class="whitespace-pre-wrap font-mono text-[12.5px] bg-paper border border-line rounded p-3">{text}</pre>
+</details>

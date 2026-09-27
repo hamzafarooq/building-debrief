@@ -1,0 +1,9 @@
+---
+import StepCheck from '@/islands/StepCheck';
+import { stepId } from '@/lib/lessons';
+interface Props { lesson: string; step: string; n: number; title: string; kicker?: string; bare?: boolean }
+const { lesson, step, n, title, kicker, bare } = Astro.props;
+---
+<StepCheck client:load id={stepId(lesson, step)} n={n} title={title} kicker={kicker} bare={bare}>
+  <slot />
+</StepCheck>

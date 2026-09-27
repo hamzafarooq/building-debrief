@@ -1,0 +1,100 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import LessonHeader from '@/components/LessonHeader.astro';
+import Step from '@/components/Step.astro';
+import CodeBlock from '@/components/CodeBlock.astro';
+import Note from '@/components/Note.astro';
+import Annotated from '@/components/Annotated.astro';
+import Figure from '@/components/Figure.astro';
+import claudeMd from '@/content/files/CLAUDE.md?raw';
+const L = 'setup';
+---
+<Layout title="Set up the repo" slug={L}>
+  <LessonHeader slug={L} goal="This site teaches skills, sub-agents, agent teams and a memory layer. This page just builds the empty folder you will put them in. No coding, and you can ask Claude to do most of it for you." />
+
+  <h2 class="text-sm font-mono uppercase tracking-wider text-ink-3 mb-3 mt-4">Before you start</h2>
+  <p class="text-ink-2 mb-4 max-w-2xl text-[15px]">Two tools, both prerequisites for the course. If either is missing, install it from <a class="underline" href="https://docs.claude.com/en/docs/claude-code">the Claude Code docs</a> or <a class="underline" href="https://code.visualstudio.com">code.visualstudio.com</a>, then mark it done.</p>
+  <div class="space-y-2 mb-12">
+    <Step lesson={L} step="install" n={1} kicker="Prerequisite" title="Claude Code is installed and signed in" bare />
+    <Step lesson={L} step="vscode" n={2} kicker="Prerequisite" title="VS Code is installed" bare />
+  </div>
+
+  <h2 class="text-sm font-mono uppercase tracking-wider text-ink-3 mb-3">Build the repo</h2>
+  <div class="space-y-4">
+    <Step lesson={L} step="folder" n={1} title="Make a folder, open it, and start Claude Code">
+      <p>Everything lives in one folder, and Claude Code only ever looks at the folder you start it in.</p>
+      <ol class="list-decimal pl-5 space-y-1 mb-4">
+        <li>Open VS Code.</li>
+        <li>Choose <strong>File &rsaquo; Open Folder</strong>.</li>
+        <li>Go to your Desktop, click <strong>New Folder</strong>, and name it <code>debrief</code>.</li>
+        <li>Select it and click <strong>Open</strong>.</li>
+        <li>Choose <strong>View &rsaquo; Terminal</strong> to open a panel at the bottom.</li>
+        <li>Type <code>claude</code> in that panel and press enter.</li>
+      </ol>
+      <Figure src="/img/setup-step1.png" alt="VS Code with an empty folder named debrief open, and Claude Code running in the terminal panel at the bottom." caption="What you should see after step 1." />
+    </Step>
+
+    <Step lesson={L} step="layout" n={2} title="Create the four folders inside it">
+      <p>There are two ways to do this. Pick one; both give the same result.</p>
+      <p class="font-mono text-[11px] uppercase tracking-wider text-ink-3 mt-6 !mb-2">Option 1 · Ask Claude (easiest)</p>
+      <p>Open the terminal inside VS Code with <strong>View &rsaquo; Terminal</strong>, type <code>claude</code> and press enter, then paste this:</p>
+      <CodeBlock file="paste into Claude Code" code={`Create four empty folders in this project: transcript, outputs, .claude/skills and .claude/agents.`} />
+      <p>Claude will ask permission before it creates anything. Say yes.</p>
+      <p class="font-mono text-[11px] uppercase tracking-wider text-ink-3 mt-6 !mb-2">Option 2 · Type it yourself</p>
+      <p>Claude is already running in your terminal from step 1, so open a second one: click the <strong>+</strong> at the top right of the terminal panel. Type this there and press enter:</p>
+      <CodeBlock file="type this in the terminal" lang="shell" code={`mkdir -p transcript outputs .claude/skills .claude/agents`} />
+      <Figure src="/img/setup-step2.png" alt="VS Code showing the four new folders in the Explorer, with the .claude folder expanded to show agents and skills, and the terminal showing Claude creating them." caption="What you should see after step 2." />
+      <Annotated title="What you just made" items={[
+        ['transcript/', 'Where you put the class recording transcript. Input.'],
+        ['outputs/', 'Where the five finished documents appear. You never edit these by hand.'],
+        ['.claude/skills/', 'Instructions Claude can follow. This is Lesson 1.'],
+        ['.claude/agents/', 'Workers with their own memory and their own permissions. Lessons 2 and 3.'],
+      ]} />
+      <Note kind="watch" title="Cannot see the .claude folder?">
+        <p>A folder whose name starts with a dot is hidden by your operating system, so it will not show up in Finder or File Explorer. VS Code shows it in the left-hand panel, which is one good reason to work there.</p>
+      </Note>
+    </Step>
+
+    <Step lesson={L} step="transcript" n={3} title="Add a class transcript">
+      <p>Debrief reads a Zoom transcript, which is a plain text file of everything said in the class with a timestamp on each line.</p>
+      <p><a class="underline font-medium" href="/files/module-2.vtt" download="module-2.vtt">Download the Module 02 transcript here</a> <span class="text-ink-3 text-sm">(module-2.vtt, 164 KB)</span>. Then upload it into the <code>transcript</code> folder in VS Code. It already has the right name.</p>
+      <p>To use your own class instead, open the Zoom recording, download the file ending in <code>.vtt</code> that is labelled "Audio transcript", and upload that one, named <code>module-N.vtt</code> with the number of your session.</p>
+      <Figure src="/img/setup-step3.png" alt="VS Code with module-2.vtt inside the transcript folder, open in the editor showing timestamped lines of speech." caption="What you should see after step 3." />
+    </Step>
+
+    <Step lesson={L} step="claude-md" n={4} title="Write CLAUDE.md, the file Claude reads first">
+      <p>Before Claude does anything in this folder, it reads a file called <code>CLAUDE.md</code>. Think of it as the briefing note you would give a new team member on their first day: here is what we make, here is our house style, here are the things you must never do.</p>
+      <p>There are two ways to make it. Pick one.</p>
+      <p class="font-mono text-[11px] uppercase tracking-wider text-ink-3 mt-6 !mb-2">Option 1 · Ask Claude to write it</p>
+      <p>Paste this into Claude Code. Fill in the three things in square brackets with your own course first.</p>
+      <CodeBlock file="paste into Claude Code" code={`Write a CLAUDE.md for this project. It is called Debrief, and it turns a class transcript into the five documents a course facilitator ships after each session: a recap email, a session report, an FAQ, a quiz and flashcards.
+
+Include these sections, and keep the whole file short:
+
+1. Layout: transcript/module-N.vtt is the input, one Zoom transcript per session. outputs/module-NN/ holds the generated documents. .claude/skills/ holds reusable instructions, .claude/agents/ holds workers with their own context, .claude/agent-memory/ holds what each worker remembers, and vault/ holds what the course knows across all modules.
+
+2. Commands, still to be built: /recap-email NN, /debrief NN, /debrief-team NN and /vault:wiki-update NN. NN is the module number, with or without a leading zero.
+
+3. Reading a transcript: read the whole .vtt file before writing anything. Cite the start time of a cue as [HH:MM:SS]. The speaker is the text before the first colon. It is machine transcription, so fix misheard words when the meaning is clear and keep the original wording when it is not.
+
+4. This course: the course is [course name]. The instructors are [names]. Questions come from [the call, Slido, chat...].
+
+5. Rules: never edit files in transcript/. Never hand-edit outputs/; fix the skill or agent instead.`} />
+      <p>Claude will ask permission before it creates the file. Say yes, then open <code>CLAUDE.md</code> and read it. This file shapes every command you build later. The parts Claude guesses at are usually the house rules and the course details, so compare them with the finished file in option 2.</p>
+      <p class="font-mono text-[11px] uppercase tracking-wider text-ink-3 mt-6 !mb-2">Option 2 · Copy the finished file</p>
+      <p class="mb-2">In VS Code, right-click the empty space in the left-hand panel, choose <strong>New File</strong>, and name it exactly <code>CLAUDE.md</code>. Copy the file below into it and save with <kbd class="font-mono text-[12px] border border-line-2 rounded px-1">Cmd</kbd>+<kbd class="font-mono text-[12px] border border-line-2 rounded px-1">S</kbd>. This is the file the real Debrief project uses.</p>
+      <CodeBlock file="CLAUDE.md" code={claudeMd} />
+      <Figure src="/img/setup-step4.png" alt="VS Code with CLAUDE.md at the top level of the folder, open in the editor showing its headings." caption="What you should see after step 4." />
+    </Step>
+
+    <Step lesson={L} step="open" n={5} title="Check that it worked">
+      <p>In the terminal inside VS Code, type <code>claude</code> and press enter if it is not already running. Then ask it a question in plain English:</p>
+      <CodeBlock file="in your Claude Code chat" code={`what does this project do?`} />
+      <p>If the answer describes Debrief, turning a transcript into five documents, then Claude is reading your <code>CLAUDE.md</code> and your setup is correct. If it says it cannot tell, check that the file is named exactly <code>CLAUDE.md</code>, in capitals, at the top level of the folder.</p>
+      <Figure src="/img/setup-step5.png" alt="Claude Code in the terminal answering the question what does this project do, describing Debrief and its five documents." caption="What you should see after step 5." />
+      <Note kind="tip" title="That is the whole setup">
+        <p>You have a folder, a transcript, and a briefing note. Nothing runs yet. Lesson 1 adds the first command, and with it the first of the three mechanisms.</p>
+      </Note>
+    </Step>
+  </div>
+</Layout>

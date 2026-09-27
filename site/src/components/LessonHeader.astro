@@ -1,0 +1,15 @@
+---
+import { lessonBySlug } from '@/lib/lessons';
+interface Props { slug: string; command?: string; goal: string }
+const { slug, command, goal } = Astro.props;
+const l = lessonBySlug(slug);
+const tone: Record<string, string> = { setup: 'bg-setup-soft text-setup', skill: 'bg-skill-soft text-skill', agent: 'bg-agent-soft text-agent', team: 'bg-team-soft text-team', vault: 'bg-vault-soft text-vault' };
+---
+<header class="mb-10">
+  <div class="flex flex-wrap items-center gap-3 mb-3">
+    <span class={`font-mono text-[11px] uppercase tracking-wider rounded px-2 py-1 ${tone[l.tone]}`}>{l.kicker}</span>
+    {command && <code class="font-mono text-sm text-ink-2">{command}</code>}
+  </div>
+  <h1 class="text-4xl font-bold tracking-tight mb-3">{l.title}</h1>
+  <p class="text-lg text-ink-2 max-w-2xl">{goal}</p>
+</header>

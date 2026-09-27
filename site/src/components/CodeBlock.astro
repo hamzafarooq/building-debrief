@@ -1,0 +1,24 @@
+---
+interface Props { file?: string; code: string; lang?: string; label?: string }
+const { file, code, lang = 'text', label } = Astro.props;
+const lines = code.split('\n').length;
+const long = lines > 26;
+---
+{label && <p class="mt-4 mb-1.5 text-[14.5px] text-ink-2">{label}</p>}
+<figure class={`${label ? 'mb-4' : 'my-4'} rounded-lg overflow-hidden border border-line bg-white not-prose`} data-code>
+  <figcaption class="flex items-center gap-2 px-3 py-1.5 border-b border-line bg-paper font-mono text-[11px] text-ink-2">
+    <span class="truncate">{file ?? lang}</span>
+    {long && <span class="text-ink-3 shrink-0">{lines} lines · scroll</span>}
+    <button type="button" class="ml-auto rounded border border-line-2 bg-white px-2 py-0.5 text-[11px] hover:border-ink-3 shrink-0" data-copy>copy</button>
+  </figcaption>
+  <pre class={`p-3 text-[12.5px] leading-relaxed font-mono whitespace-pre-wrap break-words ${long ? 'max-h-[22rem] overflow-y-auto' : ''}`}><code>{code}</code></pre>
+</figure>
+<script>
+  document.addEventListener('click', async (e) => {
+    const b = (e.target as HTMLElement).closest('[data-copy]') as HTMLButtonElement | null;
+    if (!b) return;
+    const code = b.closest('[data-code]')?.querySelector('code')?.textContent ?? '';
+    try { await navigator.clipboard.writeText(code); b.textContent = 'copied'; } catch { b.textContent = 'select and copy'; }
+    setTimeout(() => (b.textContent = 'copy'), 1500);
+  });
+</script>

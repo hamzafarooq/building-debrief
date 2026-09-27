@@ -1,0 +1,187 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import LessonHeader from '@/components/LessonHeader.astro';
+import Step from '@/components/Step.astro';
+import CodeBlock from '@/components/CodeBlock.astro';
+import Figure from '@/components/Figure.astro';
+import pluginJson from '@/content/files/claude/skills/vault/.claude-plugin/plugin.json?raw';
+import pluginReadme from '@/content/files/claude/skills/vault/README.md?raw';
+import wikiUpdate from '@/content/files/claude/skills/vault/skills/wiki-update/SKILL.md?raw';
+import wikiKeeper from '@/content/files/claude/skills/vault/agents/wiki-keeper.md?raw';
+import vaultReadme from '@/content/files/vault/README.md?raw';
+const L = 'memory-vault';
+---
+<Layout title="Memory and the vault" slug={L}>
+  <LessonHeader slug={L} goal="Everything you have built so far lasts exactly one session. This lesson is about what survives to the next one, and why that needs two different things rather than one." />
+
+  <h2 class="text-xl font-semibold mt-10 mb-2">Run it again next week and watch what happens</h2>
+  <div class="prose-lesson mb-8 max-w-2xl">
+    <p>Module 03 arrives. You drop in the transcript, type the three commands, and get five good documents. You also have a project with no idea that Module 02 ever happened.</p>
+    <p>Three things go wrong, and they are worth naming separately because they are not the same problem.</p>
+    <ul>
+      <li><strong>Judgement calls get made again from scratch.</strong> An agent works out how to handle something, and next week works it out again, possibly differently. The two sessions then disagree with each other about the same thing.</li>
+      <li><strong>Effort gets spent twice.</strong> Ground the course already covered gets covered again, taking a slot that could have gone to something new.</li>
+      <li><strong>Nobody can see across sessions.</strong> Ask what this course has taught so far, or where a particular idea was first explained, and the only way to answer is to open every output folder and read.</li>
+    </ul>
+    <p>The first two are about <strong>an agent repeating work it has already done</strong>. The third is about <strong>nobody being able to see what the course knows</strong>. Those are different problems and they need different answers, which is the distinction the whole lesson rests on.</p>
+  </div>
+
+  <h2 class="text-xl font-semibold mt-12 mb-2">What a vault is</h2>
+  <div class="prose-lesson mb-6 max-w-2xl">
+    <p>We added one to this project because that third problem needs somewhere shared, allowed to grow and readable by a person, and nothing built so far is any of those things.</p>
+    <p><strong>A vault is a folder of linked markdown pages, one page per idea.</strong> That is genuinely all it is. If you have used a personal wiki, or Obsidian, or an internal handbook where pages link to each other, you already know the shape.</p>
+    <p>In this project it is a folder called <code>vault/</code> at the top level of the repo, holding a page for each concept the instructors have explained, a page for each person who recurs, and a page for each session. Pages refer to one another with double-bracket links, so the page for one idea points at the related ones.</p>
+    <p>After Module 02 the page for <code>ctl</code> says what CTL is and records that Module 02 explained it at nine minutes in, that quiz question 2 tests it and flashcard 2 defines it. After Module 05 that same page has gained a second line, because Module 05 came back to it. Not a second page. A second line on the one page about that idea.</p>
+    <p>That accumulation is what makes it answer the third question. "Has this course explained agent loops yet?" becomes: open <code>vault/concepts/agent-loop.md</code> and look.</p>
+  </div>
+
+  <h2 class="text-xl font-semibold mt-12 mb-2">Three places things are stored, and they are not interchangeable</h2>
+  <p class="text-ink-2 mb-4 max-w-2xl text-[15px]">This is the part people mix up, so it is worth one table.</p>
+  <div class="overflow-x-auto rounded-xl border border-line bg-white mb-6">
+    <table class="w-full text-sm">
+      <thead><tr class="text-left font-mono text-[11px] uppercase tracking-wider text-ink-3"><th class="p-3"></th><th class="p-3">outputs/</th><th class="p-3">.claude/agent-memory/</th><th class="p-3">vault/</th></tr></thead>
+      <tbody class="divide-y divide-line align-top">
+        <tr><td class="p-3 font-medium">What it holds</td><td class="p-3">What you ship for one session</td><td class="p-3">How one agent does its job better next time</td><td class="p-3">What the course knows, across every session</td></tr>
+        <tr><td class="p-3 font-medium">Who reads it</td><td class="p-3">Students</td><td class="p-3">One agent, and only that agent</td><td class="p-3">People, and any agent that looks</td></tr>
+        <tr><td class="p-3 font-medium">Lifetime</td><td class="p-3">Rebuilt from the transcript every run</td><td class="p-3">Carried forward, deliberately tiny</td><td class="p-3">Added to and never regenerated</td></tr>
+        <tr><td class="p-3 font-medium">If you delete it</td><td class="p-3">Run the command again</td><td class="p-3">Agents repeat old mistakes</td><td class="p-3">The history is gone for good</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-ink-2 mb-10 max-w-2xl text-[15px]">That last row is why the vault has rules the other two do not need, and why only one agent is ever allowed to write to it. You build that agent in step 3.</p>
+
+  <div class="space-y-4 mt-10">
+    <Step lesson={L} step="plugin" n={1} title="Start the vault plugin">
+      <p>The vault is not part of the pipeline. It is a plugin: a folder holding its own skills and agents, with a small manifest, that can be switched off without touching anything you have built.</p>
+      <p class="mb-2"><strong>To create it:</strong> make these folders inside <code>.claude/skills/vault/</code>, then add the two files.</p>
+      <CodeBlock file="the shape of a plugin" code={`.claude/skills/vault/\n  .claude-plugin/plugin.json   the manifest that makes it a plugin\n  README.md                    what it is and how to turn it off\n  skills/wiki-update/SKILL.md  the command you type\n  agents/wiki-keeper.md        the one agent allowed to write`} />
+      <CodeBlock file=".claude/skills/vault/.claude-plugin/plugin.json" code={pluginJson} />
+      <CodeBlock file=".claude/skills/vault/README.md" code={pluginReadme} />
+      <p>With those in place, here is the whole of <code>.claude/</code>, with the plugin opened up so you can see how it sits next to everything from the earlier lessons.</p>
+<Figure src="/img/claude-folder.png" alt="A file tree of the .claude folder. It holds agent-memory, an agents folder with the five agent files from Lessons 2 and 3, a skills folder with beautiful-html, debrief, debrief-team, recap-email and vault, and settings.json. The vault folder is highlighted and expanded, containing .claude-plugin/plugin.json, agents/wiki-keeper.md, skills/wiki-update/SKILL.md and README.md." caption="The plugin sits among your own skills, and carries its own agent and skill inside it." width={1416} height={672} />
+    </Step>
+
+    <Step lesson={L} step="wiki-update" n={2} title="Write the command">
+      <p>Another runbook that writes nothing itself. It checks, launches one agent, and reports.</p>
+      <CodeBlock file=".claude/skills/vault/skills/wiki-update/SKILL.md" code={wikiUpdate} />
+    </Step>
+
+    <Step lesson={L} step="wiki-keeper" n={3} title="Build the agent wiki-keeper">
+      <p>This agent has a wider tool list than any you have made: it needs Edit to change one line of an existing page, and Glob and Grep to find out what already exists before it writes.</p>
+      <CodeBlock file=".claude/skills/vault/agents/wiki-keeper.md" code={wikiKeeper} />
+    </Step>
+
+    <Step lesson={L} step="vault-readme" n={4} title="Write the vault's own rules">
+      <p>One more file, and it is not machinery. <code>vault/README.md</code> sits in the vault itself and holds the conventions every ingest must follow. The plugin is the machine; this is the content's constitution.</p>
+      <CodeBlock file="vault/README.md" code={vaultReadme} />
+    </Step>
+
+    <Step lesson={L} step="run" n={5} title="Run it">
+      <CodeBlock file="in your Claude Code chat" code={`/vault:wiki-update 02`} />
+      <p>It checks that the module's deliverables exist, hands the work to <code>wiki-keeper</code>, and reports which pages changed.</p>
+      <p>The number on the end is the module, the same as in the other three commands. You run this once per session, after that session's documents exist, and the vault grows a little each week.</p>
+      <CodeBlock file="one run per module, week after week" code={`/vault:wiki-update 02\n/vault:wiki-update 03\n/vault:wiki-update 04`} />
+      <p>Nothing written earlier is thrown away. An idea taught again gains a line naming the new module, an idea taught for the first time gets a page of its own, and the log records which pages each run touched.</p>
+    </Step>
+  </div>
+
+
+  <h2 class="text-xl font-semibold mt-12 mb-2">What the vault looks like after that ingest</h2>
+  <Figure src="/img/vault-folder.png" alt="A file tree of the vault folder after one ingest. It holds README.md, index.md, log.md, a concepts folder with twelve pages including agent, ctl, harness and claude-code, a people folder with pages for the two instructors, and a sessions folder containing module-02.md." caption="Run it again after Module 03 and these concept pages gain a line each, rather than a second set appearing." width={1416} height={648} />
+
+  <div class="prose-lesson mt-8 max-w-2xl">
+    <p><strong>All of this is optional.</strong> Nothing in the pipeline depends on the vault. Disable the plugin and the three commands from Lessons 1 to 3 behave exactly as they did before, and you can run a whole course without ever typing this one. That is the reason it was packaged as a plugin rather than folded into the rest.</p>
+    <p><strong>It earns its place as the transcripts pile up.</strong> After one module you could answer any question about the course by reading five documents. After ten modules that is fifty documents spread across ten folders, and finding out whether agent loops have been explained yet, and where, means reading most of them. The vault turns that into opening one page. For a cohort like this one it also means the quiz stops re-testing terms it already spent, and a student who joins in week six has somewhere to catch up that is not ten recordings.</p>
+  </div>
+
+  <h2 class="text-xl font-semibold mt-14 mb-2">Where the vault earns its place</h2>
+  <p class="text-ink-2 mb-5 max-w-2xl text-[15px]">Five moments from running a real course, each with and without a vault. In every case the documents themselves are fine. What is missing without a vault is a view across them.</p>
+  <div class="space-y-4">
+    <div class="rounded-xl border border-line bg-white overflow-hidden">
+      <div class="px-5 pt-4 pb-3">
+        <span class="font-mono text-[11px] uppercase tracking-wider text-vault">Planning</span>
+        <p class="font-semibold mt-0.5">“Has this course explained agent loops yet?”</p>
+      </div>
+      <div class="grid sm:grid-cols-2 border-t border-line text-[14px] leading-relaxed">
+        <div class="px-5 py-3 bg-bad-soft/40 sm:border-r border-line">
+          <span class="block font-mono text-[10.5px] uppercase tracking-wider text-bad mb-1">✗ Without a vault</span>
+          <span class="text-ink-2 prose-lesson">You open every <code>outputs/module-NN/</code> folder and skim each session report. After ten modules that is ten reports, and a quick skim can still miss it.</span>
+        </div>
+        <div class="px-5 py-3 bg-ok-soft/50 border-t sm:border-t-0 border-line">
+          <span class="block font-mono text-[10.5px] uppercase tracking-wider text-ok mb-1">✓ With a vault</span>
+          <span class="text-ink-2 prose-lesson">You open <code>vault/concepts/agent-loop.md</code>. It is there with the module and timestamp where it was taught, or it is not there and the answer is no.</span>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-xl border border-line bg-white overflow-hidden">
+      <div class="px-5 pt-4 pb-3">
+        <span class="font-mono text-[11px] uppercase tracking-wider text-vault">A late joiner</span>
+        <p class="font-semibold mt-0.5">A student joins in week six and asks where to start.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 border-t border-line text-[14px] leading-relaxed">
+        <div class="px-5 py-3 bg-bad-soft/40 sm:border-r border-line">
+          <span class="block font-mono text-[10.5px] uppercase tracking-wider text-bad mb-1">✗ Without a vault</span>
+          <span class="text-ink-2 prose-lesson">They get a link to five recordings, or twenty-five documents in five folders, with no way to tell which ideas matter most.</span>
+        </div>
+        <div class="px-5 py-3 bg-ok-soft/50 border-t sm:border-t-0 border-line">
+          <span class="block font-mono text-[10.5px] uppercase tracking-wider text-ok mb-1">✓ With a vault</span>
+          <span class="text-ink-2 prose-lesson">They start at <code>vault/index.md</code>: every idea taught so far, one page each, each pointing to the exact minute of the class where it was explained.</span>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-xl border border-line bg-white overflow-hidden">
+      <div class="px-5 pt-4 pb-3">
+        <span class="font-mono text-[11px] uppercase tracking-wider text-vault">Consistency</span>
+        <p class="font-semibold mt-0.5">Module 05 describes an idea differently from Module 02.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 border-t border-line text-[14px] leading-relaxed">
+        <div class="px-5 py-3 bg-bad-soft/40 sm:border-r border-line">
+          <span class="block font-mono text-[10.5px] uppercase tracking-wider text-bad mb-1">✗ Without a vault</span>
+          <span class="text-ink-2 prose-lesson">Nobody notices until a student asks which one is right. Each week’s documents are correct on their own and quietly disagree with each other.</span>
+        </div>
+        <div class="px-5 py-3 bg-ok-soft/50 border-t sm:border-t-0 border-line">
+          <span class="block font-mono text-[10.5px] uppercase tracking-wider text-ok mb-1">✓ With a vault</span>
+          <span class="text-ink-2 prose-lesson"><code>wiki-keeper</code> keeps both lines on the one concept page, names the module that said each, and reports the contradiction when it runs. You hear about it the same day.</span>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-xl border border-line bg-white overflow-hidden">
+      <div class="px-5 pt-4 pb-3">
+        <span class="font-mono text-[11px] uppercase tracking-wider text-vault">Re-runs</span>
+        <p class="font-semibold mt-0.5">You re-run a module and get a different answer.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 border-t border-line text-[14px] leading-relaxed">
+        <div class="px-5 py-3 bg-bad-soft/40 sm:border-r border-line">
+          <span class="block font-mono text-[10.5px] uppercase tracking-wider text-bad mb-1">✗ Without a vault</span>
+          <span class="text-ink-2 prose-lesson">Whatever the latest run wrote is all there is. Our Module 02 transcript produced 37, 46 and 33 topics on three runs, so each re-run quietly drops what the last one found.</span>
+        </div>
+        <div class="px-5 py-3 bg-ok-soft/50 border-t sm:border-t-0 border-line">
+          <span class="block font-mono text-[10.5px] uppercase tracking-wider text-ok mb-1">✓ With a vault</span>
+          <span class="text-ink-2 prose-lesson">Nothing is lost. The vault only adds or corrects, so a thinner pass takes nothing away, and what one run found stays on its page.</span>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-xl border border-line bg-white overflow-hidden">
+      <div class="px-5 pt-4 pb-3">
+        <span class="font-mono text-[11px] uppercase tracking-wider text-vault">End of course</span>
+        <p class="font-semibold mt-0.5">You write the final review and want to see which ideas were never tested.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 border-t border-line text-[14px] leading-relaxed">
+        <div class="px-5 py-3 bg-bad-soft/40 sm:border-r border-line">
+          <span class="block font-mono text-[10.5px] uppercase tracking-wider text-bad mb-1">✗ Without a vault</span>
+          <span class="text-ink-2 prose-lesson">You open ten quizzes and ten sets of flashcards and cross-check them by hand.</span>
+        </div>
+        <div class="px-5 py-3 bg-ok-soft/50 border-t sm:border-t-0 border-line">
+          <span class="block font-mono text-[10.5px] uppercase tracking-wider text-ok mb-1">✓ With a vault</span>
+          <span class="text-ink-2 prose-lesson">Every concept page has a <em>Used in</em> section naming the quiz question and flashcard that cover it. A page with nothing under it is an idea no quiz has tested yet.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rounded-xl border border-line bg-paper p-5 mt-6 max-w-2xl text-[15px] text-ink-2">
+    <p class="font-semibold text-ink mb-1">A quick way to tell if you need one</p>
+    <p>If the question starts with “has this course ever…”, “where was…” or “what do we know about…”, it spans sessions, and that is a vault question. If it is “how should this agent do its job better next week”, that is agent memory. If it is “what goes out to students today”, that is <code>outputs/</code>, and neither of the other two is needed.</p>
+  </div>
+
+</Layout>

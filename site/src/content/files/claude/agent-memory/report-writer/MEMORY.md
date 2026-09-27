@@ -1,0 +1,2 @@
+- [Topics taught](topics-taught.md) — what has already been explained, with module and timestamp, so later modules read as build-ups.
+- [Transcription fixes](transcription-fixes.md) — heard -> meant corrections for this course's Zoom VTTs (names, Claude Code, CLAUDE.md, SKILL.md).

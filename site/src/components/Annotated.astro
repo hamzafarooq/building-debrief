@@ -1,0 +1,16 @@
+---
+// "In plain words": maps the jargon in a file to what it actually means.
+interface Props { title?: string; items: [string, string][] }
+const { title = 'In plain words', items } = Astro.props;
+---
+<div class="my-4 rounded-lg border border-line bg-paper/70 overflow-hidden">
+  <p class="px-4 py-2 border-b border-line font-mono text-[11px] uppercase tracking-wider text-ink-3">{title}</p>
+  <dl class="divide-y divide-line">
+    {items.map(([k, v]) => (
+      <div class="grid sm:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] gap-x-4 gap-y-0.5 px-4 py-2.5">
+        <dt class="font-mono text-[12.5px] text-ink break-words">{k}</dt>
+        <dd class="text-[14.5px] text-ink-2">{v}</dd>
+      </div>
+    ))}
+  </dl>
+</div>

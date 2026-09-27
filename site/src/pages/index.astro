@@ -1,0 +1,60 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import PathList from '@/islands/PathList';
+import FlowReplay from '@/islands/FlowReplay';
+import { pipeNodes, pipeEdges, pipeScript, pipeFinal, pipeLanes } from '@/content/replays';
+---
+<Layout title="Home">
+  <header class="mb-14">
+    <div class="text-center">
+      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight leading-[1.1] mb-3">Building Debrief</h1>
+      <p class="text-lg sm:text-xl text-ink-2 mb-5">A hands-on guide in the four ways Claude Code divides work.</p>
+      <ul class="flex flex-wrap justify-center gap-2 mb-10">
+        <li class="rounded-full px-3 py-1 text-sm font-medium bg-skill-soft text-skill">Skills</li>
+        <li class="rounded-full px-3 py-1 text-sm font-medium bg-agent-soft text-agent">Sub-agents</li>
+        <li class="rounded-full px-3 py-1 text-sm font-medium bg-team-soft text-team">Agent teams</li>
+        <li class="rounded-full px-3 py-1 text-sm font-medium bg-vault-soft text-vault">Memory</li>
+      </ul>
+    </div>
+
+    <div class="max-w-[36rem] mx-auto rounded-xl border border-line bg-white p-5 sm:p-6 text-[16.5px] leading-relaxed">
+      <p class="font-mono text-[11px] uppercase tracking-wider text-ink-3 mb-2">The job you will automate</p>
+      <p class="text-ink">Every week, a course facilitator turns a two-hour Zoom transcript into five documents:</p>
+      <ul class="flex flex-wrap gap-1.5 my-3">
+        {['recap email', 'session report', 'FAQ', 'quiz', 'flashcards'].map((d) => (
+          <li class="font-mono text-[13px] rounded-md border border-line-2 bg-paper px-2 py-0.5">{d}</li>
+        ))}
+      </ul>
+      <p class="text-ink-2">It is the same work every week, it is slow, and it is easy to get slightly wrong. You will build <strong class="text-ink">Debrief</strong>, the small Claude Code project that does it.</p>
+    </div>
+
+    <div class="text-center mt-8">
+      <a href="/setup" class="inline-block rounded-lg bg-ink text-paper px-6 py-3 font-medium">Start with setup →</a>
+      <p class="text-sm text-ink-3 mt-3">No coding. You copy files, run commands and watch what happens.</p>
+    </div>
+  </header>
+
+  <h2 class="text-xl font-semibold mb-2">The whole project, running</h2>
+  <p class="text-ink-2 mb-4 max-w-2xl text-[15px]">This is where you are headed: the four commands you will build, replayed from our real Module 02 run. Each lane is one lesson. Press run and watch the work move.</p>
+  <div class="mb-14">
+    <FlowReplay client:visible nodes={pipeNodes} edges={pipeEdges} script={pipeScript} final={pipeFinal} finalTitle="one transcript, four commands" label="Module 02 run · four commands" lanes={pipeLanes} compact orient="lr" height={630} />
+  </div>
+
+  <h2 class="text-xl font-semibold mb-4">What you will come away with</h2>
+  <ul class="rounded-xl border border-line bg-white p-5 sm:p-6 space-y-3 mb-14 text-[15px] text-ink-2">
+    <li class="flex gap-3"><span class="text-ok font-semibold shrink-0">✓</span><span><strong class="text-ink">A working project of your own.</strong> One transcript in, five documents and three web pages out, from a folder you built step by step.</span></li>
+    <li class="flex gap-3"><span class="text-ok font-semibold shrink-0">✓</span><span><strong class="text-skill">Skills:</strong> how to write a repeatable task down once, so it comes out the same way every time you run it.</span></li>
+    <li class="flex gap-3"><span class="text-ok font-semibold shrink-0">✓</span><span><strong class="text-agent">Sub-agents:</strong> how to hand heavy reading to helpers that work in parallel, each in its own space, so your own chat stays clear.</span></li>
+    <li class="flex gap-3"><span class="text-ok font-semibold shrink-0">✓</span><span><strong class="text-team">Agent teams:</strong> how to get two agents to agree with each other before they write, when one's choices affect the other's.</span></li>
+    <li class="flex gap-3"><span class="text-ok font-semibold shrink-0">✓</span><span><strong class="text-vault">Memory:</strong> how to make each run build on the last, so what the course knows grows every week instead of starting from zero.</span></li>
+    <li class="flex gap-3"><span class="text-ok font-semibold shrink-0">✓</span><span><strong class="text-ink">The judgment to pick the right one.</strong> For your own work, you will know which of the four a task needs, and when a simple prompt is enough.</span></li>
+  </ul>
+
+  <h2 class="text-xl font-semibold mb-4">The path</h2>
+  <PathList client:load />
+
+  <div class="rounded-xl border border-line bg-white p-5 text-sm text-ink-2">
+    <p class="font-semibold text-ink mb-1">How the lessons work</p>
+    <p>Each lesson gives you files to create, one step at a time, with the full contents to paste. Press “Mark done” when you have done it, and the next step opens. A lesson opens once every step before it, including the check at the end of each lesson, is done. Progress stays in your browser. Then run the command for real in your own repo, watch a replay of what happened in ours, and pass a short check.</p>
+  </div>
+</Layout>

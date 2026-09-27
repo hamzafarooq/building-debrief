@@ -1,0 +1,31 @@
+---
+// The five documents a facilitator ships. Every lesson closes by marking off what exists.
+interface Props { done: string[]; note: string }
+const { done, note } = Astro.props;
+const DOCS: [string, string, string][] = [
+  ['recap-email.md', 'Recap email', 'Lesson 1'],
+  ['session-report.md', 'Session report', 'Lesson 2'],
+  ['faq.md', 'FAQ', 'Lesson 2'],
+  ['quiz.md', 'Quiz', 'Lesson 3'],
+  ['flashcards.md', 'Flashcards', 'Lesson 3'],
+];
+---
+<section class="mt-14 rounded-xl border border-line bg-white p-5">
+  <div class="flex flex-wrap items-baseline gap-x-3 mb-1">
+    <h2 class="text-base font-semibold">What you have built so far</h2>
+    <span class="font-mono text-xs text-ink-3">{done.length} of 5 documents</span>
+  </div>
+  <p class="text-ink-2 text-[15px] mb-4 max-w-2xl">{note}</p>
+  <ul class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+    {DOCS.map(([file, label, lesson]) => {
+      const ok = done.includes(file);
+      return (
+        <li class={`rounded-lg border px-3 py-2.5 ${ok ? 'border-ok bg-ok-soft' : 'border-line bg-paper'}`}>
+          <span class={`block font-mono text-[10px] ${ok ? 'text-ok' : 'text-ink-3'}`}>{ok ? '✓ built' : lesson}</span>
+          <span class={`block text-sm font-medium leading-snug ${ok ? '' : 'text-ink-3'}`}>{label}</span>
+          <span class="block font-mono text-[10px] text-ink-3 mt-0.5 truncate">{file}</span>
+        </li>
+      );
+    })}
+  </ul>
+</section>
